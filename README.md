@@ -17,9 +17,7 @@ The project suffers from issues due to lack of allosteric binding data and the s
 The models used in this study include:
 
     * [Ankh-large](https://github.com/agemagician/Ankh) 
-
     * [ESM2](https://github.com/facebookresearch/esm)
-
     * [Prot t5 xl](https://github.com/agemagician/ProtTrans/tree/master)
 
 ## Datasets
