@@ -35,7 +35,7 @@ PLM_Allosteric_Classification/
 ├──  finetuning/
 │   ├── Ankh/
 |       ├── Ankh_large_finetuning.py # Script to perform finetuning of Ankh_large with classification head with weighted CE loss on ASD data
-│   ├── ESM2/        # Training configuration
+│   ├── ESM2/        
 |       ├── esm2_t33_650m_ur50d_finetuning # Script to perform finetuning of esm2_t33_650m with classificatio head and weighted CE loss on ASD data
 │   ├── ProtT5  
 |       ├── ContrastiveLoss/
