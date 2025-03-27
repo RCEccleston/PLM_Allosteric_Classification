@@ -1,4 +1,4 @@
-
+''' this script is adapted from https://huggingface.co/blog/AmelieSchreiber/esmbind'''
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import wandb
