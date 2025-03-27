@@ -367,6 +367,7 @@ trainer = CustomTrainer(
 
 trainer.train()
 
+# run pass test dataset through trained model and get predictions and performance
 predictions, labels, metrics_output = trainer.predict(test_dataset)
 metrics_output
 
@@ -376,6 +377,7 @@ pd.set_option('display.width', None)
 print("test metrics")
 print(metrics_output)
 
+# save model
 path = '/home/lshre1/PredAllo/Ankh_large_ASD_7A_30I_Lig_trunc.ckpt'
 torch.save(trainer.model.state_dict(), path)
 
