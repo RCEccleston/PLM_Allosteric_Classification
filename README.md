@@ -27,6 +27,9 @@ There are 2 main datasets used in this project:
 
 The secondary structure prediction data used in the multi-task learning was generated using the Biopython DSSP module
 
+## Classification head
+The classification head for the allosteric binding site classification task used in this project is a Convolutional Transformer-based Token Classifier, specifically designed for multiclass token classification by the team behind Ankh. 
+
 ## Project Structure
 ```bash
 PLM_Allosteric_Classification/
