@@ -2,30 +2,28 @@
 ## Overview
 This project explores the use of protein language models (PLMs) for token-level classification of allosteric binding sites. It includes two main tasks:
 
-    * Embedding Extraction: Extracting token-level embeddings as input for a classification head.
-    * Fine-tuning: Adapting PLMs using LoRA, DeepSpeed, and PEFT to finetune them to the allosteric binding site dataset.
+* Embedding Extraction: Extracting token-level embeddings as input for a classification head.
+* Fine-tuning: Adapting PLMs using LoRA, DeepSpeed, and PEFT to finetune them to the allosteric binding site dataset.
 
 The project suffers from issues due to lack of allosteric binding data and the sparseness of positive (ie allosteric) labels in the dataset. In an attempt to mitigate this the following techniques have been used:
 
-    * Weighted cross-entropy loss
-    * Transfer learning with larger PDBbind dataset
-    * Contrastive loss
-    * Focal loss
-    * Segmented data
-    * Multi-task learning with 2 classification heads: allosteric site prediction and secondard structure prediction 
+* Weighted cross-entropy loss
+* Transfer learning with larger PDBbind dataset
+* Contrastive loss
+* Focal loss
+* Segmented data
+* Multi-task learning with 2 classification heads: allosteric site prediction and secondard structure prediction 
 
 The models used in this study include:
-
-    * [Ankh-large](https://github.com/agemagician/Ankh) 
-    * [ESM2](https://github.com/facebookresearch/esm)
-    * [Prot t5 xl](https://github.com/agemagician/ProtTrans/tree/master)
+* [Ankh-large](https://github.com/agemagician/Ankh)
+* [ESM2](https://github.com/facebookresearch/esm)
+* [Prot t5 xl](https://github.com/agemagician/ProtTrans/tree/master)
 
 ## Datasets
 There are 2 main datasets used in this project:
 
-    * Allosteric site database: ASD_Release_202306_XF which can be found [here](https://mdl.shsmu.edu.cn/ASD/)
-    
-    * PDBbind dataset: PDBbind v2020 which can be found [here](https://www.pdbbind-plus.org.cn/)
+* Allosteric site database: ASD_Release_202306_XF which can be found [here](https://mdl.shsmu.edu.cn/ASD/)    
+* PDBbind dataset: PDBbind v2020 which can be found [here](https://www.pdbbind-plus.org.cn/)
 
 The secondary structure prediction data used in the multi-task learning was generated using the Biopython DSSP module
 
