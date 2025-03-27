@@ -126,6 +126,7 @@ def make_mask(sequences):
 
 HALF_PRECISION = True
 
+# load train and test data
 train_file = '/home/lshre1/PredAllo/train_df.csv'
 test_file = '/home/lshre1/PredAllo/test_df.csv'
 train_df = pd.read_csv(train_file)
@@ -301,7 +302,7 @@ def modify_with_lora(transformer, config):
     return transformer
 
 def contrastive_loss_fn(embeddings, labels):
-  # Reshape embeddings if needed
+  # Reshape embeddings 
   embeddings = embeddings.view(-1, embeddings.size(-1))  # Flatten to (N, embedding_dim)
 
   # Compute pairwise squared distances
@@ -322,16 +323,13 @@ def contrastive_loss_fn(embeddings, labels):
     for j, l2 in enumerate(labels):
       if i > j:
         continue
-        # or maybe
-        # if i >= j: continue
-        # also maybe don't need if i==j -> True == 1, False == 0 (can be used in calculation)
         if l1 == l2:
-          contrastive_label = 1
+          contrastive_label = 1 # set positive contrastive labels
 
         else:
-          contrastive_label = 0
+          contrastive_label = 0 # set negative contrastive labels
         distance = distances[i,j]
-        loss = contrastive_label * torch.pow(distance, 2) + (1 - contrastive_label) * torch.pow(F.relu(margin - distance), 2)
+        loss = contrastive_label * torch.pow(distance, 2) + (1 - contrastive_label) * torch.pow(F.relu(margin - distance), 2) # compute contrastive loss
         contrastive_loss += loss
 
   return contrastive_loss
