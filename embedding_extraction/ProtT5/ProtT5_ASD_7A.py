@@ -81,17 +81,7 @@ def make_mask(sequences):
     masks.append([1]*len(seq))
   return masks
 
-#filename =  'drive/MyDrive/ASD_Release_202306_XF_Allosteric_Contacts_7A_edited.csv'
-
-#total_df = pd.read_csv(filename)
-#total_df = total_df.dropna()
-#df = total_df[total_df['Modulator_Class'].fillna('').str.lower().str.contains('lig', na=False)]
-#sequences = df['Sequences']
-#labels = df['Labels'].apply(ast.literal_eval)
-
-#sequences = sequences.tolist()
-#labels = labels.tolist()
-
+# import training and test data
 train_file = 'drive/MyDrive/train_df.csv'
 test_file = 'drive/MyDrive/test_df.csv'
 train_df = pd.read_csv(train_file)
