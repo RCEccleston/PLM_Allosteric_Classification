@@ -430,48 +430,6 @@ def compute_metrics(pred):
     }
 
 mismatch = [(thing.get("embed").shape[0], thing.get("labels").shape[0]) for thing in training_dataset if thing.get("embed").shape[0] != thing.get("labels").shape[0]]
-mismatch
-
-#class CustomTrainer(Trainer):
-#  def __init__(self, weight_0, weight_1, **kwargs):
-#    super().__init__(**kwargs)
-#    self.weights = torch.tensor([weight_0, weight_1]).float().to(device)
-
-#  def compute_loss(self, model, inputs, return_outputs=False):
-#    print("inputs ", inputs)
-#   labels = inputs.get("labels")
-#    print(labels)
-    #attention_mask = inputs.get("attention_mask").to(device)
-    #print(attention_mask)
-#    outputs = model(input_ids=inputs.get("input_ids").to(device))
-
-   # Extract logits from the outputs
-#    logits = outputs.logits
-
-#    loss_fct = nn.CrossEntropyLoss(weight=self.weights)
-#    active_loss = attention_mask.view(-1) == 1
-#    active_logits = logits.view(-1, model.classifier.out_features)[active_loss]
-#    active_labels = labels.view(-1)[active_loss]
-#    loss = loss_fct(active_logits, active_labels)
-#    return (loss, outputs) if return_outputs else loss
-
-class CustomTrainer(Trainer):
-    def __init__(self, weight_0, weight_1, **kwargs):
-        super().__init__(**kwargs)
-        self.weights=torch.tensor([weight_0, weight_1]).float().cuda()
-    def compute_loss(self, model, inputs, return_outputs=False):
-        labels = inputs.get("labels")
-        #print(labels.shape)
-        #print(inputs.get("embed").shape)
-        # print(inputs)
-        # forward pass
-        outputs = model(inputs.get("embed"))
-        logits = outputs.get("logits")
-        #print(logits.shape)
-        # compute custom loss (suppose one has 3 labels with different weights)
-        loss_fct = nn.CrossEntropyLoss(weight=self.weights)
-        loss = loss_fct(logits.view(-1, self.model.num_labels), labels.view(-1))
-        return (loss, outputs) if return_outputs else loss
 
 class CustomTrainer(Trainer):
     def __init__(self, weight_0, weight_1, **kwargs):
