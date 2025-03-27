@@ -456,9 +456,9 @@ class T5EncoderForTokenClassification(T5PreTrainedModel):
             #loss = loss_fct(valid_logits, valid_labels)
             # Focal Loss calculation
             probs = F.softmax(valid_logits, dim=-1)  # Apply softmax to valid logits
-            ce_loss = F.cross_entropy(valid_logits, valid_labels, reduction="none")
+            ce_loss = F.cross_entropy(valid_logits, valid_labels, reduction="none") # calculate cross entropy loss
             p_t = probs.gather(1, valid_labels.unsqueeze(1)).squeeze(1)
-            loss = alpha * (1 - p_t) ** gamma * ce_loss
+            loss = alpha * (1 - p_t) ** gamma * ce_loss # calculate focal loss
             #return focal_loss.mean()
 
         if not return_dict:
