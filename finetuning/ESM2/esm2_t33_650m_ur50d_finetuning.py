@@ -63,6 +63,7 @@ def set_seeds(s):
 seed= 42      #random seed
 set_seeds(seed)
 
+# Load train and test data
 train_file = '/home/lshre1/PredAllo/train_df.csv'
 test_file = '/home/lshre1/PredAllo/test_df.csv'
 train_df = pd.read_csv(train_file)
@@ -123,7 +124,7 @@ accelerator = Accelerator()
 class_weights = torch.tensor(class_weights, dtype=torch.float32).to(accelerator.device)
 
 print(class_weights)
-
+# function to calculate metrics
 def compute_metrics(p):
     logits = p.predictions.reshape(-1, p.predictions.shape[-1])
     labels = p.label_ids.reshape(-1)
@@ -170,7 +171,7 @@ def compute_loss(model, inputs):
     loss = loss_fct(active_logits, active_labels)
     return loss
 
-# Define Custom Trainer Class
+# Custom Trainer Class
 class WeightedTrainer(Trainer):
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         outputs = model(**inputs)
@@ -251,11 +252,11 @@ def train_function_no_sweeps(train_dataset, valid_dataset, test_dataset):
         inference_mode=False,
         r=config["r"],
         lora_alpha=config["lora_alpha"],
-        target_modules=["query", "key", "value", "dense_h_to_4h", "dense_4h_to_h"], # also try "dense_h_to_4h" and "dense_4h_to_h"
+        target_modules=["query", "key", "value", "dense_h_to_4h", "dense_4h_to_h"], # layers to target
         lora_dropout=config["lora_dropout"],
         bias="none" # or "all" or "lora_only"
     )
-    model = get_peft_model(model, peft_config)
+    model = get_peft_model(model, peft_config) # create peft model
 
     # Use the accelerator
     model = accelerator.prepare(model)
