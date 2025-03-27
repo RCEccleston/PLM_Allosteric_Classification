@@ -243,20 +243,6 @@ def align_predictions(predictions: np.ndarray, label_ids: np.ndarray):
 
         return preds_list, out_label_list
 
-#def compute_metrics(p):
-#  logits = p.predictions.reshape(-1, p.predictions.shape[-1])
-#  labels = p.label_ids.reshape(-1)
-#  probs = softmax(logits, axis=1)
-#  probs = probs[:,-1].reshape(-1)
-
-#  probs = probs[labels!=-100]
-#  labels = labels[labels!=-100]
-
-#  fpr, tpr, thresholds = metrics.roc_curve(labels, probs)
-#  auc = metrics.auc(fpr, tpr)
-#  aps = average_precision_score(labels, probs)
-#  return {"AUC" : auc, "APS" : aps}
-
 def compute_metrics(p):
     logits = p.predictions.reshape(-1, p.predictions.shape[-1])
     labels = p.label_ids.reshape(-1)
@@ -311,10 +297,10 @@ model_embed_dim = 1536
 model_type = 'ankh_large'
 experiment = f'ASD_Release_202306_XF_Allosteric_Contacts_7A_unique_Lig_Pep_PDB_pocket{model_type}'
 
-model_path  = '/home/lshre1/PredAllo/Ankh_PDB_pocket_30I_truncated.ckpt'
+#model_path  = '/home/lshre1/PredAllo/Ankh_PDB_pocket_30I_truncated.ckpt'
 
-pdb_model = model_init(num_tokens=2, embed_dim=model_embed_dim)
-pdb_model.load_state_dict(torch.load(model_path))
+#pdb_model = model_init(num_tokens=2, embed_dim=model_embed_dim)
+#pdb_model.load_state_dict(torch.load(model_path))
 
 
 training_args = TrainingArguments(
@@ -357,35 +343,27 @@ class CustomTrainer(Trainer):
         loss = loss_fct(logits.view(-1, self.model.num_labels), labels.view(-1))
         return (loss, outputs) if return_outputs else loss
 
-model_embed_dim = 1536
+model_embed_dim = 1536 # Embedding dimension for ankh large.
+#trainer = CustomTrainer(
+#    weight_0=weight_0,
+#    weight_1=weight_1,
+#    model=pdb_model,
+#    args=training_args,
+#    train_dataset=training_dataset,
+#    eval_dataset=validation_dataset,
+#    compute_metrics=compute_metrics,
+#)
+
 trainer = CustomTrainer(
     weight_0=weight_0,
     weight_1=weight_1,
-    model=pdb_model,
+    model_init=partial(model_init, num_tokens=2, embed_dim=model_embed_dim),
     args=training_args,
     train_dataset=training_dataset,
     eval_dataset=validation_dataset,
     compute_metrics=compute_metrics,
 )
-#model_embed_dim = 1536 # Embedding dimension for ankh large.
 
-#trainer = CustomTrainer(
-#    weight_0=weight_0,
-#    weight_1=weight_1,
-#    model_init=partial(model_init, num_tokens=2, embed_dim=model_embed_dim),
-#    args=training_args,
-#    train_dataset=training_dataset,
-#    eval_dataset=validation_dataset,
-#    compute_metrics=compute_metrics,
-#)
-
-#trainer = Trainer(
-#    model_init=partial(model_init, num_tokens=2, embed_dim=model_embed_dim),
-#    args=training_args,
-#    train_dataset=training_dataset,
-#    eval_dataset=validation_dataset,
-#    compute_metrics=compute_metrics,
-#)
 
 trainer.train()
 
