@@ -1,3 +1,4 @@
+''' this script is adapted from https://huggingface.co/blog/AmelieSchreiber/esmbind'''
 
 import ankh
 import torch
