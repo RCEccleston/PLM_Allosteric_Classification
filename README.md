@@ -1,6 +1,6 @@
 # Predicting Allosteric Binding Sites using Protein Language Models
 ## Overview
-This project explores the use of protein language models (pLMs) for token-level classification of allosteric binding sites. It includes three main methods:
+This project explores the use of protein language models (pLMs) for token-level classification of allosteric binding sites (pre-print can be found [here](https://doi.org/10.1101/2025.06.27.662060)). It includes three main methods:
 
 * Embedding Extraction: Extracting token-level embeddings as input for a classification head.
 * Fine-tuning: Adapting pLMs using LoRA, DeepSpeed, and PEFT to finetune them to the allosteric binding site dataset
