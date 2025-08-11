@@ -17,17 +17,13 @@ import ankh
 from functools import partial
 import evaluate
 from sklearn import metrics
-from scipy.special import softmax
-from sklearn.metrics import roc_auc_score
 import random
 import ast
 from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm
 from datasets import Dataset as HFDataset
-from sklearn.metrics import average_precision_score
 from scipy.special import softmax
 from sklearn.metrics import roc_curve, auc, average_precision_score, precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
-from scipy.special import softmax
 
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
