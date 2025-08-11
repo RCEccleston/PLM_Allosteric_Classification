@@ -14,27 +14,20 @@ import numpy as np
 import pandas as pd
 import copy
 import ankh
-#from seqeval.metrics import accuracy_score, f1_score, precision_score, recall_score
 from functools import partial
 import evaluate
-#from sklearn.metrics import average_precision_score
 from sklearn import metrics
 from scipy.special import softmax
 from sklearn.metrics import roc_auc_score
 import random
 import ast
 from sklearn.model_selection import train_test_split
-#from datasets import Dataset
 from tqdm.auto import tqdm
 from datasets import Dataset as HFDataset
-import evaluate
 from sklearn.metrics import average_precision_score
-from sklearn import metrics
 from scipy.special import softmax
-from sklearn.metrics import 
 from sklearn.metrics import roc_curve, auc, average_precision_score, precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
 from scipy.special import softmax
-from Bio.Align import PairwiseAligner
 
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
