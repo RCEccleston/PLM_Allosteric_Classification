@@ -168,20 +168,6 @@ def trunc_labels(labels, max_length=1026):
 print("len train embeds [0]", len(training_embeddings[0]))
 print("len train labels [0]", len(train_labels[0]))
 
-
-class AlloDataset(Dataset):
-  def __init__(self, encodings, labels):
-    self.encodings = encodings
-    self.labels = labels
-
-  def __getitem__(self, idx):
-    embedding = self.encodings[idx]
-    labels = self.labels[idx]
-    return {'embed': torch.tensor(embedding), 'labels': torch.tensor(labels)}
-
-  def __len__(self):
-    return len(self.labels)
-
 class AlloDataset(Dataset):
     def __init__(self, encodings, labels):
         self.encodings = encodings
@@ -233,40 +219,6 @@ def model_init(num_tokens, embed_dim):
                                                                 kernel_size=conv_kernel_size,
                                                                 dropout=dropout)
     return downstream_model.cuda()
-
-def compute_metrics(p):
-    logits = p.predictions.reshape(-1, p.predictions.shape[-1])
-    labels = p.label_ids.reshape(-1)
-    probs = softmax(logits, axis=1)
-    probs = probs[:, -1].reshape(-1)
-
-    # Filter out invalid labels
-    probs = probs[labels != -100]
-    labels = labels[labels != -100]
-
-    # Calculate AUC and APS
-    fpr, tpr, thresholds = roc_curve(labels, probs)
-    auc_value = auc(fpr, tpr)
-    aps = average_precision_score(labels, probs)
-
-    # Binarize the probabilities for precision, recall, F1 score, and accuracy
-    threshold = 0.5
-    preds = (probs >= threshold).astype(int)
-
-    precision = precision_score(labels, preds)
-    recall = recall_score(labels, preds)
-    f1 = f1_score(labels, preds)
-    accuracy = accuracy_score(labels, preds)
-
-    return {
-        "AUC": auc_value,
-        "APS": aps,
-        "Precision": precision,
-        "Recall": recall,
-        "F1": f1,
-        "Accuracy": accuracy
-    }
-
 
 def compute_metrics(p):
     logits = p.predictions.reshape(-1, p.predictions.shape[-1])
