@@ -216,17 +216,6 @@ def embed_dataset(model,tokenizer,seqs,labels):
 
       return embeddings
 
-# Dataset creation
-def create_dataset(tokenizer,seqs,labels):
-    tokenized = tokenizer(seqs, max_length=1024, padding=True, add_special_tokens=True, return_tensors="pt")
-    #tokenized = tokenizer.batch_encode_plus(sequence_examples, add_special_tokens=True, padding="longest")
-
-    dataset = datasets.Dataset.from_dict(tokenized)
-    # we need to cut of labels after 1023 positions for the data collator to add the correct padding (1023 + 1 special tokens)
-    labels = [l[:1023] for l in labels]
-    dataset = dataset.add_column("labels", labels)
-
-    return dataset, labels
 
 # Dataset creation function
 def create_dataset(tokenizer, seqs, labels):
