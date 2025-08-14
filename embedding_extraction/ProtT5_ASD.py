@@ -186,60 +186,19 @@ my_train['sequence'] = my_train.apply(lambda row: " ".join(row["sequence"]), axi
 my_valid['sequence'] = my_valid.apply(lambda row: " ".join(row["sequence"]), axis=1)
 my_test['sequence'] = my_test.apply(lambda row: " ".join(row["sequence"]), axis=1)
 
-def embed_dataset(model,tokenizer,seqs,labels):
-    # tokenize sequences and pad up to the longest sequence in the batch
-    ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
-    input_ids = torch.tensor(ids['input_ids']).to(device)
-    attention_mask = torch.tensor(ids['attention_mask']).to(device)
-    reprs = []
-    embeddings = []
-    batch = 32
-    N_batches = int(np.ceil(len(seqs)/batch))
-    # generate embeddings
-    with torch.no_grad():
-      for i in range(N_batches):
-        start = i*batch
-        end = (i+1)*batch
-        input_id = input_ids[start:end]
-        mask = attention_mask[start:end]
-        embedding_repr = model(input_ids=input_id,attention_mask=mask)
-        reprs.append(embedding_repr)
-    # Concatenate along dimension 0 (rows)
-    concatenated_reprs = torch.cat(reprs, dim=0)
 
-    for i, seq in enumerate(seqs):
+# Dataset creation
+def create_dataset(tokenizer,seqs,labels):
+    tokenized = tokenizer(seqs, max_length=1024, padding=True, add_special_tokens=True, return_tensors="pt")
+    #tokenized = tokenizer.batch_encode_plus(sequence_examples, add_special_tokens=True, padding="longest")
 
-      # extract embeddings for the first ([0,:]) sequence in the batch while removing padded & special tokens
-      emb = concatenated_reprs[i].last_hidden_state[i,:len(seq)] # shape (len(seq) x 1024)
-      print(f"Shape of per-residue embedding: {emb.shape}")
-      embeddings.append(emb)
-
-      return embeddings
-
-
-# Dataset creation function
-def create_dataset(tokenizer, seqs, labels):
-    # Tokenize the sequences
-    tokenized = tokenizer(seqs, max_length=1024, padding='max_length', truncation=True, return_tensors="pt")
-
-    # Pad labels to length 1024
-    trunc_labels = []
-    for label in labels:
-        if len(label) < 1024:
-
-            trunc_label = label
-        else:
-            # Truncate the label if it's longer than 1024
-            trunc_label = label[:1024]
-        trunc_labels.append(trunc_label)
-
-    # Add the padded labels to the tokenized dataset
-    tokenized["labels"] = trunc_labels
-
-    # Create the dataset from the tokenized data
     dataset = datasets.Dataset.from_dict(tokenized)
+    # we need to cut of labels after 1023 positions for the data collator to add the correct padding (1023 + 1 special tokens)
+    labels = [l[:1023] for l in labels]
+    dataset = dataset.add_column("labels", labels)
 
-    return dataset, trunc_labels
+    return dataset, labels
+
 
 # Preprocess inputs
 print("Preprocess inputs")
